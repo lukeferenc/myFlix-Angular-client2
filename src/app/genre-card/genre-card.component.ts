@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-genre-card',
@@ -8,13 +8,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog'
   styleUrls: ['./genre-card.component.scss'],
 })
 export class GenreCardComponent implements OnInit {
-  /**
-   *
-   * @param data
-   */
+  genre: any = this.data.name;
+
   constructor(
     public fetchApiData: FetchApiDataService,
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(MatDialog)
     public data: {
       name: string;
       description: string;
