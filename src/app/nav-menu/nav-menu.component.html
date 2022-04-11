@@ -1,1 +1,11 @@
-<p>nav-menu works!</p>
+<div class="nav-bar">
+    <mat-toolbar class="tool-bar">
+      <span class="spacer"></span>
+      <button mat-button (click)="moveToProfile()">Profile</button>
+      <button mat-button (click)="moveToMovies()">Movies</button>
+  
+      <button class="logout" mat-button color="primary" (click)="logOut()">
+        Logout
+      </button>
+    </mat-toolbar>
+  </div>
