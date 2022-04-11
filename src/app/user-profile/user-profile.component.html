@@ -1,4 +1,31 @@
-<div class="profile-page">
-    <h1>My favourites</h1>
-    <div class="fav-list"></div>
-  </div>
+<app-nav-menu></app-nav-menu>
+<div class="user-profile">
+
+    <mat-card class="usercard">
+        <mat-card-header>
+            <mat-card-title class="usercard-title">Hello, {{user.Username}}!</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="usercard-content">
+            <p><b>Username:</b> {{user.Username}}</p>
+            <p><b>Email:</b> {{user.Email}}</p>
+            <p><b>Birthdate:</b> {{user.Birthday}}</p>
+        </mat-card-content>
+        <mat-card-actions class="usercard-actions">
+            <button
+                mat-raised-button
+                (click)="openUserEditDialog()"
+                style="margin-right: 10px;"
+                color="primary"
+            >
+                Edit profile
+            </button>
+            <button
+                mat-raised-button
+                (click)="openDeleteUserDialog()"
+                color="primary"
+            >
+                Delete profile
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>
