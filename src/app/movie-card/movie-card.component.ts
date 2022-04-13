@@ -34,11 +34,11 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
-  openGenreCard(name: string, description: string): void {
+  openGenreCard(Name: string, Description: string): void {
     this.dialog.open(GenreCardComponent, {
       data: {
-        name,
-        description,
+        Name,
+        Description,
       },
       width: '450px',
     });
