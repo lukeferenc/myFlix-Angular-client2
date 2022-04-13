@@ -6,7 +6,7 @@
       <mat-card-subtitle
         >Directed by: {{ movie.Director.Name }}</mat-card-subtitle
       >
-      <mat-icon class="favourite-icon" color="warn">favorite</mat-icon>
+      <mat-icon class="favourite-icon" color="warn">favourite</mat-icon>
     </mat-card-header>
     <img
       src="{{ movie.ImagePath }}"
@@ -31,8 +31,7 @@
         (click)="
           openDirectorCard(
             movie.Director.Name,
-            movie.Director.Bio,
-            movie.Director.Birthdate
+            movie.Director.Bio
           )
         "
       >

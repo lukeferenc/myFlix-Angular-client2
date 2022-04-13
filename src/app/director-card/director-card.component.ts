@@ -2,6 +2,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Data } from '@angular/router';
 import { Component, OnInit, Inject } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog'
 
 @Component({
   selector: 'app-director-card',
@@ -11,13 +12,14 @@ import { FetchApiDataService } from '../fetch-api-data.service';
 export class DirectorCardComponent implements OnInit {
   constructor(
     public fetchApiData: FetchApiDataService,
-    @Inject(MatDialog)
+    @Inject(MAT_DIALOG_DATA)
     public data: {
-      name: string;
-      bio: string;
-      birthdate: Date;
+      Name: string;
+      Bio: string;
     }
+
   ) {}
 
   ngOnInit(): void {}
+
 }

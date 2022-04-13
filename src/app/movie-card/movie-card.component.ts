@@ -44,16 +44,16 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
-  openDirectorCard(name: string, bio: string, birthdate: Date): void {
+  openDirectorCard(Name: string, Bio: string,): void {
     this.dialog.open(DirectorCardComponent, {
-      data: { name, bio, birthdate },
+      data: { Name, Bio},
       width: '450px',
     });
   }
 
-  openMovieView(name: string, description: string): void {
+  openMovieView(Title: string, Description: string): void {
     this.dialog.open(MovieViewComponent, {
-      data: { name, description },
+      data: { Title, Description },
       width: '450px',
     });
   }

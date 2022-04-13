@@ -8,7 +8,7 @@ import { Observable, throwError, catchError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 //Declaring the api url that will provide data for the client app
-const apiUrl = 'https://myflix-application-2021.herokuapp.com/';
+const apiUrl = 'https://lukesmovies.herokuapp.com/';
 
 @Injectable({
   providedIn: 'root',
@@ -70,9 +70,9 @@ export class FetchApiDataService {
   }
 
   // API Call get director endpoint
-  getDirector(): Observable<any> {
+  getDirector(directorName:string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.get(apiUrl + 'directors/:Name', {
+    return this.http.get(apiUrl + 'directors/' + directorName, {
         headers: new HttpHeaders({Authorization: 'Bearer ' + token,}),
       }).pipe(
       map(this.extractResponseData), 
