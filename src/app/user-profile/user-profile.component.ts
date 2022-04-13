@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
 
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { DeleteUserComponent } from '../delete-user/delete-user.component';
+import { GenreCardComponent } from '../genre-card/genre-card.component';
+import { DirectorCardComponent } from '../director-card/director-card.component';
+import { MovieViewComponent } from '../movie-view/movie-view.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,6 +18,7 @@ import { DeleteUserComponent } from '../delete-user/delete-user.component';
 export class UserProfileComponent implements OnInit {
   user: any = {};
   favMovies: any = {};
+  Username = localStorage.getItem('user');
 
   constructor(
     public dialog: MatDialog,
@@ -28,16 +32,19 @@ export class UserProfileComponent implements OnInit {
   }
 
   getUserProfile(): void {
-    this.fetchApiData.getUserProfile().subscribe((res: any) => {
-      this.user = res;
-      console.log(this.user);
-      return this.user;
-    });
+    const user = localStorage.getItem('user');
+    if (user) {
+      this.fetchApiData.getUser().subscribe((res: any) => {
+        this.user = res;
+        console.log(this.user);
+        return this.user;
+      });
+    }
   }
 
   openEditUserDialog(): void {
     this.dialog.open(EditUserComponent, {
-      width: '280px',
+      width: '300px',
     });
   }
 
@@ -47,19 +54,52 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  getFavMovies(): void {
-    this.fetchApiData.getAllMovies().subscribe((res: any) => {
-      this.favMovies = res.filter((movie: any) => {
-        return this.user.FavouriteMovies.includes(movie._id);
-      });
-      console.log(this.favMovies);
-      return this.favMovies;
+  openGenreDialog(name: string, description: string): void {
+    this.dialog.open(GenreCardComponent, {
+      data: { name: name, description: description },
+      width: '280px',
     });
   }
 
-  deleteFavMovies(id: string): void {
-    this.fetchApiData.deleteFavoriteMovies(id).subscribe((res: any) => {
-      this.snackBar.open('Movie has been removed from favorite list', 'OK', {
+  openDirectorDialog(name: string, bio: string, birthdate: string): void {
+    this.dialog.open(DirectorCardComponent, {
+      data: { name: name, bio: bio, birth: birthdate },
+      width: '300px',
+    });
+  }
+
+  openMovieDescDialog(title: string, description: string): void {
+    this.dialog.open(MovieViewComponent, {
+      data: { title: title, description: description },
+      width: '300px',
+    });
+  }
+
+  removeUser(): void {
+    this.fetchApiData.deleteUser().subscribe(() => {
+      this.snackBar.open(`${this.Username} has been removed!`, 'OK', {
+        duration: 4000,
+      });
+      localStorage.clear();
+    });
+    this.router.navigate(['welcome']);
+  }
+
+  getFavMovies(): void {
+    const user = localStorage.getItem('user');
+    if (user) {
+      this.fetchApiData.getUser().subscribe((res: any) => {
+        this.favMovies = res.FavoriteMovies;
+        console.log(this.favMovies);
+        return this.favMovies;
+      });
+    }
+  }
+
+  deleteFavFilms(MovieID: string, title: string): void {
+    this.fetchApiData.deleteFavMovies(MovieID).subscribe((res: any) => {
+      console.log(res);
+      this.snackBar.open('Movie has been removed from favorites', 'OK', {
         duration: 2000,
       });
       this.ngOnInit();
