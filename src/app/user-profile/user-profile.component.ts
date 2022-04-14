@@ -17,7 +17,7 @@ import { MovieViewComponent } from '../movie-view/movie-view.component';
 })
 export class UserProfileComponent implements OnInit {
   user: any = {};
-  favMovies: any = {};
+  FavouriteMovies: any = {};
   Username = localStorage.getItem('user');
 
   constructor(
@@ -29,6 +29,7 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserProfile();
+    this.getFavouriteMovies();
   }
 
   getUserProfile(): void {
@@ -85,13 +86,13 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['welcome']);
   }
 
-  getFavMovies(): void {
+  getFavouriteMovies(): void {
     const user = localStorage.getItem('user');
     if (user) {
       this.fetchApiData.getUser().subscribe((res: any) => {
-        this.favMovies = res.FavoriteMovies;
-        console.log(this.favMovies);
-        return this.favMovies;
+        this.FavouriteMovies = res.FavoriteMovies;
+        console.log(this.FavouriteMovies);
+        return this.FavouriteMovies;
       });
     }
   }
@@ -103,7 +104,7 @@ export class UserProfileComponent implements OnInit {
         duration: 2000,
       });
       this.ngOnInit();
-      return this.favMovies;
+      return this.FavouriteMovies;
     });
   }
 }
