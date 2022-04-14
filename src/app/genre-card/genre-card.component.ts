@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { Data } from '@angular/router';
 
 @Component({
   selector: 'app-genre-card',

@@ -15,11 +15,15 @@ import { MovieViewComponent } from '../movie-view/movie-view.component';
 })
 export class MovieCardComponent implements OnInit {
   movies: any[] = [];
+  Favourites: any[] = [];
+  user: any[] = [];
+
 
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,9 +41,7 @@ export class MovieCardComponent implements OnInit {
   openGenreCard(Name: string, Description: string): void {
     this.dialog.open(GenreCardComponent, {
       data: {
-        Name,
-        Description,
-      },
+        Name, Description },
       width: '450px',
     });
   }
@@ -56,5 +58,43 @@ export class MovieCardComponent implements OnInit {
       data: { Title, Description },
       width: '450px',
     });
+  }
+
+  getFavouriteMovies(): void {
+    const user = localStorage.getItem('username');
+    this.fetchApiData.getUser().subscribe((resp: any) => {
+      this.Favourites = resp.FavouriteMovies;
+      console.log(this.Favourites);
+    });
+  }
+
+  addFavouriteMovies(id: string, title: string): void {
+    this.fetchApiData.addFavouriteMovies(id).subscribe((resp: any) => {
+      this.snackBar.open(`${title} has been added to your Watchlist!`, 'OK', {
+        duration: 4000,
+      });
+      this.ngOnInit();
+    });
+    return this.getFavouriteMovies();
+  }
+
+  removeFavouriteMovie(id: string): void {
+    this.fetchApiData.deleteFavouriteMovies(id).subscribe((resp: any) => {
+      console.log(resp);
+      this.snackBar.open(`${id} has been removed from your favorites!`, 'OK', {
+        duration: 4000,
+      });
+      this.ngOnInit();
+    });
+    return this.getFavouriteMovies();
+  }
+
+  isFavorite(id: string): boolean {
+    return this.Favourites.some((movie) => movie._id === id);
+  }
+  toggleFavorite(movie: any): void {
+    this.isFavorite(movie._id)
+      ? this.removeFavouriteMovie(movie._id)
+      : this.addFavouriteMovies(movie._id, movie.Title);
   }
 }

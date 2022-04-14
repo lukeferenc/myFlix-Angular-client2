@@ -69,7 +69,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  openMovieDescDialog(title: string, description: string): void {
+  openMovieViewDialog(title: string, description: string): void {
     this.dialog.open(MovieViewComponent, {
       data: { title: title, description: description },
       width: '300px',
@@ -97,8 +97,8 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  deleteFavFilms(MovieID: string, title: string): void {
-    this.fetchApiData.deleteFavMovies(MovieID).subscribe((res: any) => {
+  deleteFavourtieMovies(MovieID: string, title: string): void {
+    this.fetchApiData.deleteFavouriteMovies(MovieID).subscribe((res: any) => {
       console.log(res);
       this.snackBar.open('Movie has been removed from favorites', 'OK', {
         duration: 2000,

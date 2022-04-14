@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpErrorResponse,
-} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpErrorResponse,} from '@angular/common/http';
 import { Observable, throwError, catchError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 //Declaring the api url that will provide data for the client app
 const apiUrl = 'https://lukesmovies.herokuapp.com/';
+export interface User {
+  _id: string;
+  FavoriteMovies: Array<string>;
+  Username: string;
+  Email: string;
+  Birthday: Date;
+}
+
 
 @Injectable({
   providedIn: 'root',
@@ -135,7 +139,7 @@ export class FetchApiDataService {
   }
 
   // API Call add movie to favourite movies list endpoint
-  addFavMovies(id: string): Observable<any> {
+  addFavouriteMovies(id: string): Observable<any> {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
     return this.http.post(apiUrl + `users/${username}/movies/${id}`, null, {
@@ -146,7 +150,7 @@ export class FetchApiDataService {
   }
 
   // API Call delete movie from favourite movies list endpoint
-  deleteFavMovies(id: string): Observable<any> {
+  deleteFavouriteMovies(id: string): Observable<any> {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
     return this.http.delete(apiUrl + `users/${username}/movies/${id}`, {
