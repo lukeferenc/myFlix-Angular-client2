@@ -61,7 +61,7 @@ export class MovieCardComponent implements OnInit {
   }
 
   getFavouriteMovies(): void {
-    const user = localStorage.getItem('username');
+    const user = localStorage.getItem('user');
     this.fetchApiData.getUser().subscribe((resp: any) => {
       this.Favourites = resp.FavouriteMovies;
       console.log(this.Favourites);

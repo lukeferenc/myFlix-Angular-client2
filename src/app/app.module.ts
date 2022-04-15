@@ -25,7 +25,7 @@ import { GenreCardComponent } from './genre-card/genre-card.component';
 import { DirectorCardComponent } from './director-card/director-card.component';
 import { MovieViewComponent } from './movie-view/movie-view.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { DeleteUserComponent } from './delete-user/delete-user.component';
+import { RemoveUserComponent } from './delete-user/delete-user.component';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
@@ -47,7 +47,7 @@ const appRoutes: Routes = [
     DirectorCardComponent,
     MovieViewComponent,
     NavMenuComponent,
-    DeleteUserComponent
+    RemoveUserComponent
   ],
   imports: [
     BrowserModule,

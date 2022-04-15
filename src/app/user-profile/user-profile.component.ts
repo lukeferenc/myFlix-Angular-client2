@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
 import { EditUserComponent } from '../edit-user/edit-user.component';
-import { DeleteUserComponent } from '../delete-user/delete-user.component';
+import { RemoveUserComponent } from '../delete-user/delete-user.component';
 import { GenreCardComponent } from '../genre-card/genre-card.component';
 import { DirectorCardComponent } from '../director-card/director-card.component';
 import { MovieViewComponent } from '../movie-view/movie-view.component';
@@ -50,7 +50,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   openDeleteUserDialog(): void {
-    this.dialog.open(DeleteUserComponent, {
+    console.log("delete")
+    this.dialog.open(RemoveUserComponent, {
       width: '280px',
     });
   }
@@ -90,7 +91,7 @@ export class UserProfileComponent implements OnInit {
     const user = localStorage.getItem('user');
     if (user) {
       this.fetchApiData.getUser().subscribe((res: any) => {
-        this.FavouriteMovies = res.FavoriteMovies;
+        this.FavouriteMovies = res.FavouriteMovies;
         console.log(this.FavouriteMovies);
         return this.FavouriteMovies;
       });
@@ -100,7 +101,7 @@ export class UserProfileComponent implements OnInit {
   deleteFavourtieMovies(MovieID: string, title: string): void {
     this.fetchApiData.deleteFavouriteMovies(MovieID).subscribe((res: any) => {
       console.log(res);
-      this.snackBar.open('Movie has been removed from favorites', 'OK', {
+      this.snackBar.open('Movie has been removed from favourites', 'OK', {
         duration: 2000,
       });
       this.ngOnInit();

@@ -40,8 +40,7 @@ export class EditUserComponent implements OnInit {
     this.fetchApiData.editUser(this.userProfile).subscribe((resp) => {
       this.dialogRef.close();
 
-      localStorage.setItem('Username', this.userProfile.Username);
-      localStorage.setItem('Password', this.userProfile.Password);
+      localStorage.setItem('user', this.userProfile.Username);
 
       this.snackBar.open('Your profile was updated successfully!', 'OK', {
         duration: 4000,

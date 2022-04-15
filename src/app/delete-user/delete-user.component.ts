@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./delete-user.component.scss'],
 })
 export class RemoveUserComponent implements OnInit {
-  user: any = JSON.parse(localStorage.getItem('user') || '');
 
   constructor(
     public fetchApiData: FetchApiDataService,
@@ -20,8 +19,10 @@ export class RemoveUserComponent implements OnInit {
   ngOnInit(): void {}
 
   deleteUser(): void {
+    console.log("deleteuserdialog")
+    const user = localStorage.getItem('user');
     this.fetchApiData.removeUserProfile().subscribe(() => {
-      this.snackbar.open(`${this.user} has been deleted`, 'OK', {
+      this.snackbar.open(`${user} has been deleted`, 'OK', {
         duration: 4000,
       });
       localStorage.clear();
