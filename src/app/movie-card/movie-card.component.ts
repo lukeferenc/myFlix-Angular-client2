@@ -90,11 +90,12 @@ export class MovieCardComponent implements OnInit {
   }
 
   isFavorite(id: string): boolean {
-    return this.Favourites.some((movie) => movie._id === id);
+    return this.Favourites.some((movie) => movie === id);
   }
   toggleFavorite(movie: any): void {
     this.isFavorite(movie._id)
       ? this.removeFavouriteMovie(movie._id)
       : this.addFavouriteMovies(movie._id, movie.Title);
   }
+  
 }

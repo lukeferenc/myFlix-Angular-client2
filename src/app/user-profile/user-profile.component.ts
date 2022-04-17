@@ -17,7 +17,7 @@ import { MovieViewComponent } from '../movie-view/movie-view.component';
 })
 export class UserProfileComponent implements OnInit {
   user: any = {};
-  FavouriteMovies: any = {};
+  FavouriteMovies: any[] = [];
   Username = localStorage.getItem('user');
 
   constructor(
@@ -29,7 +29,8 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserProfile();
-    this.getFavouriteMovies();
+    this.getFavs();
+    // this.getFavouriteMovies();
   }
 
   getUserProfile(): void {
@@ -87,24 +88,26 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['welcome']);
   }
 
-  getFavouriteMovies(): void {
-    const user = localStorage.getItem('user');
-    if (user) {
-      this.fetchApiData.getUser().subscribe((res: any) => {
-        this.FavouriteMovies = res.FavouriteMovies;
-        console.log(this.FavouriteMovies);
-        return this.FavouriteMovies;
-      });
-    }
+  getFavs(): void {
+    let movies: any[] = [];
+    this.fetchApiData.getAllMovies().subscribe((res: any) => {
+      movies = res;
+      movies.forEach((movie: any) => {
+        if (this.user.FavouriteMovies.includes(movie._id)) {
+          this.FavouriteMovies.push(movie);
+        }
+        });
+    }); 
   }
 
-  deleteFavourtieMovies(MovieID: string, title: string): void {
+  deleteFavouriteMovie(MovieID: string): void {
     this.fetchApiData.deleteFavouriteMovies(MovieID).subscribe((res: any) => {
       console.log(res);
       this.snackBar.open('Movie has been removed from favourites', 'OK', {
         duration: 2000,
       });
-      this.ngOnInit();
+      // this.ngOnInit();
+      location.reload();
       return this.FavouriteMovies;
     });
   }
