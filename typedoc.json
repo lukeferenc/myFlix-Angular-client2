@@ -1,0 +1,4 @@
+{
+    "entryPoints": ["src/app/app.module.ts", "src/app/director-card/director-card.component.ts", "src/app/fetch-api-data.service.ts" ],
+    "out": "docs"
+  }
