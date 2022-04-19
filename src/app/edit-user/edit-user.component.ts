@@ -1,3 +1,8 @@
+/**
+ * The UserEditComponent is used to render information about the user and edit it.
+ * @module UserEditComponent
+ */
+
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -18,6 +23,10 @@ export class EditUserComponent implements OnInit {
     public snackBar: MatSnackBar
   ) {}
 
+  /**
+   *  Binding input values to the userProfile object
+   */
+
   @Input() userProfile = {
     Username: this.user.Username,
     Password: this.user.Password,
@@ -29,12 +38,24 @@ export class EditUserComponent implements OnInit {
     this.getUser();
   }
 
+  /**
+   * get user info
+   */
+
   getUser(): void {
     const user = localStorage.getItem('user');
     this.fetchApiData.getUser().subscribe((resp: any) => {
       this.user = resp;
     });
   }
+
+  /**
+   * updates user information in API
+   * @function editUser
+   * @param Username {any}
+   * @param userProfile {any}
+   * @return an updated user in json format
+   */
 
   editUser(): void {
     this.fetchApiData.editUser(this.userProfile).subscribe((resp) => {

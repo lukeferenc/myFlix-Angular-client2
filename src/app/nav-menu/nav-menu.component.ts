@@ -19,15 +19,27 @@ export class NavMenuComponent implements OnInit {
 
   ngOnInit(): void {}
 
+
+  /**
+   * Redirect to welcome screen.
+   */
+
   moveToMovies(): void {
     this.router.navigate(['movies']);
   }
+
+  /**
+   * Redirect to user profile.
+   */
 
   moveToProfile(): void {
     this.router.navigate(['users']);
   }
 
-
+  /**
+   * log out user and clear localstorage. Then redirect to welcome screen.
+   */
+  
   logOut(): void {
     localStorage.clear();
     this.snackBar.open('You have logged out', 'Ok', {

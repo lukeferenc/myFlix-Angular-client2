@@ -1,3 +1,8 @@
+/**
+ * UserProfileComponent is used to view the user profile.
+ * @module UserProfileComponent
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -33,6 +38,13 @@ export class UserProfileComponent implements OnInit {
     // this.getFavouriteMovies();
   }
 
+  /**
+   * call API endpoint to get user info
+   * @function getUserProfile
+   * @param Username
+   * @return users data in json format
+   */
+
   getUserProfile(): void {
     const user = localStorage.getItem('user');
     if (user) {
@@ -44,11 +56,19 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  /**
+   * open a dialog to edit the profile of the user
+   */
+
   openEditUserDialog(): void {
     this.dialog.open(EditUserComponent, {
       width: '300px',
     });
   }
+
+  /**
+   * open a dialog to edit the profile of the user
+   */
 
   openDeleteUserDialog(): void {
     console.log("delete")
@@ -57,12 +77,20 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  /**
+   *open a dialog to display the GenreViewComponent
+  */
+
   openGenreDialog(name: string, description: string): void {
     this.dialog.open(GenreCardComponent, {
       data: { name: name, description: description },
       width: '280px',
     });
   }
+
+  /**
+   * open a dialog to display the DirectorViewComponent
+   */
 
   openDirectorDialog(name: string, bio: string, birthdate: string): void {
     this.dialog.open(DirectorCardComponent, {
@@ -71,12 +99,23 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  /**
+   * open a dialog to display the MovieDescriptionComponent
+   */
+
   openMovieViewDialog(title: string, description: string): void {
     this.dialog.open(MovieViewComponent, {
       data: { title: title, description: description },
       width: '300px',
     });
   }
+
+  /**
+   * call API endpoint to remove the current user
+   * @function removeUserProfile
+   * @param Username {any}
+   * @return that the account has been removed
+   */
 
   removeUser(): void {
     this.fetchApiData.deleteUser().subscribe(() => {
@@ -87,6 +126,10 @@ export class UserProfileComponent implements OnInit {
     });
     this.router.navigate(['welcome']);
   }
+
+  /**
+   * Get users FavouriteMovies from the users data
+   */
 
   getFavs(): void {
     let movies: any[] = [];
@@ -99,6 +142,13 @@ export class UserProfileComponent implements OnInit {
         });
     }); 
   }
+
+  /**
+   * use API end-point to remove user favourite
+   * @function deleteFavouriteMovie
+   * @param Id {string}
+   * @returns updated users data in json format
+   */
 
   deleteFavouriteMovie(MovieID: string): void {
     this.fetchApiData.deleteFavouriteMovies(MovieID).subscribe((res: any) => {

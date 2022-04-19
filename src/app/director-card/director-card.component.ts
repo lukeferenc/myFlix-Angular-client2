@@ -1,5 +1,8 @@
-import { MatDialog } from '@angular/material/dialog';
-import { Data } from '@angular/router';
+/**
+ * DirectorCardComponent renders information about the directors.
+ * @module DirectorCardComponent
+ */
+
 import { Component, OnInit, Inject } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'
@@ -9,6 +12,10 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog'
   templateUrl: './director-card.component.html',
   styleUrls: ['./director-card.component.scss'],
 })
+/**
+ *
+ * @param data
+ */
 export class DirectorCardComponent implements OnInit {
   constructor(
     public fetchApiData: FetchApiDataService,

@@ -1,3 +1,8 @@
+/**
+ * MovieViewComponent renders information about the Movie.
+ * @module MovieDescriptionComponent
+ */
+
 import { Component, OnInit, Inject } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'
@@ -8,6 +13,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog'
   styleUrls: ['./movie-view.component.scss'],
 })
 export class MovieViewComponent implements OnInit {
+  /**
+   *
+   * @param data
+   */
+  
   constructor(
     public fetchApiData: FetchApiDataService,
     @Inject(MAT_DIALOG_DATA)

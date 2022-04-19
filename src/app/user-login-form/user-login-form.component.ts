@@ -1,3 +1,8 @@
+/**
+ * UserLoginFormComponent is used to login users.
+ * @module UserLoginFormComponent
+ */
+
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FetchApiDataService } from '../fetch-api-data.service';
@@ -11,6 +16,10 @@ import { Router } from '@angular/router';
 })
 export class UserLoginFormComponent implements OnInit {
 
+  /**
+   * Get input info and store in userCredentials
+   */
+
   @Input() userCredentials= { Username: '', Password: '' };
 
   constructor(
@@ -22,6 +31,14 @@ export class UserLoginFormComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  /**
+   * Login user via input field by using API endpoint
+   * And store the users data in localstorage
+   * @function userLogin
+   * @param loginData {object}
+   * @return users data in json format
+   */
 
   loginUser(): void {
     this.fetchApiData.userLogin(this.userCredentials).subscribe(
