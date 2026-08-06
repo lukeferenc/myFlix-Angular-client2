@@ -1,0 +1,36 @@
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+}
+
+.tool-bar {
+  background: rgba(11, 13, 18, 0.82) !important;
+  border-bottom: 1px solid var(--line);
+  color: var(--cream) !important;
+  padding: 0 clamp(0.75rem, 3vw, 1.5rem);
+  min-height: 64px;
+}
+
+.nav-brand {
+  text-decoration: none;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.tool-bar button {
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.logout {
+  margin-left: 0.35rem;
+  border-color: rgba(243, 235, 224, 0.28) !important;
+  color: var(--cream) !important;
+}

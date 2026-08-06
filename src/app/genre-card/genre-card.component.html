@@ -1,6 +1,8 @@
-<mat-card>
-    <mat-card-header>
-      <mat-card-title>Genre: {{ data.Name }}</mat-card-title>
-    </mat-card-header>
-    <mat-dialog-content>{{ data.Description }}</mat-dialog-content>
-  </mat-card>
+<mat-card class="auth-card dialog-card">
+  <mat-card-header>
+    <mat-card-title>{{ data.Name }}</mat-card-title>
+  </mat-card-header>
+  <mat-dialog-content>
+    <p>{{ data.Description }}</p>
+  </mat-dialog-content>
+</mat-card>

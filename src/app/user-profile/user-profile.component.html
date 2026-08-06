@@ -1,59 +1,43 @@
 <app-nav-menu></app-nav-menu>
-<div class="user-profile">
-    <mat-card class="usercard">
-      <mat-card-header>
-        <mat-card-title>My Profile</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="usercard-greeting"
-        >Hey {{ user.Username }}!</mat-card-content
-      >
-  
-      <mat-card-content class="usercard-content">
-        <p><b>Username:</b> {{ user.Username }}</p>
-        <p><b>Email:</b> {{ user.Email }}</p>
-        <p><b>Birthdate:</b> {{ user.Birthday }}</p>
-      </mat-card-content>
-      <mat-card-actions class="usercard-actions">
-        <button
-          class="edit-button"
-          mat-raised-button
-          (click)="openEditUserDialog()"
-          style="margin-left: 10px"
-          color="primary"
-        >
-          Edit profile
-        </button>
-        <button
-          class="delete-button"
-          mat-raised-button
-          (click)="openDeleteUserDialog()"
-          style="margin-left: 130px"
-          color="warn"
-        >
-          Delete profile
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-  
-  <h2 class="user-fav">My Favourite Movies</h2>
-  <div class="favorites-container">
-    <mat-card
-      *ngFor="let favourite of FavouriteMovies; let i = index"
-      class="favorite-card"
-    >
-      <mat-card-header class="fav-header">
-        <mat-card-title class="fav-title">{{ favourite.Title }}</mat-card-title>
-        <mat-card-subtitle class="fav-subtitle">
-          Directed by: {{ favourite.Director.Name }}
-        </mat-card-subtitle>
-      </mat-card-header>
-      <div class="img-container">
-        <img src="{{ favourite.ImagePath }}" alt="{{ favourite.Title }}" />
-      </div>
-  
-      <button mat-icon-button (click)="deleteFavouriteMovie(favourite._id)">
-        <mat-icon class="remove-btn">remove_circle</mat-icon>
+
+<section class="profile">
+  <header class="profile__header">
+    <p class="profile__eyebrow">Account</p>
+    <h1>Hey, {{ user.Username }}</h1>
+  </header>
+
+  <mat-card class="profile-card">
+    <mat-card-content>
+      <p><span>Username</span>{{ user.Username }}</p>
+      <p><span>Email</span>{{ user.Email }}</p>
+      <p><span>Birthday</span>{{ user.Birthday }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="button" (click)="openEditUserDialog()">
+        Edit profile
       </button>
-    </mat-card>
+      <button mat-stroked-button color="warn" type="button" (click)="openDeleteUserDialog()">
+        Delete profile
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <h2 class="profile__fav-title">Favourite movies</h2>
+  <div class="favorites-grid">
+    <article class="fav-card" *ngFor="let favourite of FavouriteMovies">
+      <img [src]="favourite.ImagePath" [alt]="favourite.Title" />
+      <div class="fav-card__meta">
+        <h3>{{ favourite.Title }}</h3>
+        <p>{{ favourite.Director.Name }}</p>
+      </div>
+      <button
+        mat-icon-button
+        type="button"
+        aria-label="Remove from favorites"
+        (click)="deleteFavouriteMovie(favourite._id)"
+      >
+        <mat-icon>remove_circle</mat-icon>
+      </button>
+    </article>
   </div>
+</section>

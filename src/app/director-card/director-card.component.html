@@ -1,6 +1,8 @@
-<mat-card>
-    <mat-card-header>
-      <mat-card-title>Director: {{ data.Name }}</mat-card-title>
-    </mat-card-header>
-    <mat-dialog-content>{{ data.Bio }}</mat-dialog-content>
-  </mat-card>
+<mat-card class="auth-card dialog-card">
+  <mat-card-header>
+    <mat-card-title>{{ data.Name }}</mat-card-title>
+  </mat-card-header>
+  <mat-dialog-content>
+    <p>{{ data.Bio }}</p>
+  </mat-dialog-content>
+</mat-card>

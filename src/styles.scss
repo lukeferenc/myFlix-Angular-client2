@@ -1,26 +1,11 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$myFlix-Angular-client2-primary: mat.define-palette(mat.$indigo-palette);
-$myFlix-Angular-client2-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
+$myFlix-Angular-client2-primary: mat.define-palette(mat.$amber-palette, 600, 400, 800);
+$myFlix-Angular-client2-accent: mat.define-palette(mat.$blue-grey-palette, 300);
 $myFlix-Angular-client2-warn: mat.define-palette(mat.$red-palette);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$myFlix-Angular-client2-theme: mat.define-light-theme((
+$myFlix-Angular-client2-theme: mat.define-dark-theme((
   color: (
     primary: $myFlix-Angular-client2-primary,
     accent: $myFlix-Angular-client2-accent,
@@ -28,12 +13,97 @@ $myFlix-Angular-client2-theme: mat.define-light-theme((
   )
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include mat.all-component-themes($myFlix-Angular-client2-theme);
 
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --ink: #0b0d12;
+  --ink-elevated: #141822;
+  --ink-soft: #1c2230;
+  --line: rgba(240, 232, 214, 0.12);
+  --cream: #f3ebe0;
+  --cream-muted: rgba(243, 235, 224, 0.68);
+  --amber: #e8a317;
+  --amber-deep: #c4840e;
+  --font-display: "Syne", system-ui, sans-serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--cream);
+  background:
+    radial-gradient(ellipse 90% 55% at 10% -10%, rgba(232, 163, 23, 0.16), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(70, 110, 160, 0.18), transparent 50%),
+    var(--ink);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4, .brand, .mat-card-title {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--amber);
+}
+
+.mat-raised-button.mat-primary,
+.mat-flat-button.mat-primary {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.mat-dialog-container {
+  background: var(--ink-elevated) !important;
+  color: var(--cream) !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--line);
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.mat-form-field {
+  width: 100%;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.auth-card,
+.mat-dialog-container .mat-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--cream) !important;
+  padding: 1.5rem 1.75rem 1.25rem !important;
+}
+
+.mat-dialog-container .mat-card-title {
+  font-size: 1.5rem !important;
+  margin-bottom: 0.5rem;
+}
+
+.mat-dialog-container .mat-card-actions {
+  padding: 0.5rem 0 0 !important;
+  margin: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
