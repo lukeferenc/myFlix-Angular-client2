@@ -3,8 +3,8 @@
  * @module UserEditComponent
  */
 
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { FetchApiDataService } from '../fetch-api-data.service';
+import { Component, OnInit } from '@angular/core';
+import { FetchApiDataService, User } from '../fetch-api-data.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -14,8 +14,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./edit-user.component.scss'],
 })
 export class EditUserComponent implements OnInit {
-  Username = localStorage.getItem('username');
-  user: any = {};
+  private original: User | null = null;
+
+  /**
+   *  Binding input values to the userProfile object
+   */
+  userProfile = { Username: '', Password: '', Email: '', Birthday: '' };
 
   constructor(
     public fetchApiData: FetchApiDataService,
@@ -23,52 +27,45 @@ export class EditUserComponent implements OnInit {
     public snackBar: MatSnackBar
   ) {}
 
-  /**
-   *  Binding input values to the userProfile object
-   */
-
-  @Input() userProfile = {
-    Username: this.user.Username,
-    Password: this.user.Password,
-    Email: this.user.Email,
-    Birthday: this.user.Birthday,
-  };
-
   ngOnInit(): void {
-    this.getUser();
-  }
-
-  /**
-   * get user info
-   */
-
-  getUser(): void {
-    const user = localStorage.getItem('user');
-    this.fetchApiData.getUser().subscribe((resp: any) => {
-      this.user = resp;
+    this.fetchApiData.getUser().subscribe((user) => {
+      this.original = user;
+      this.userProfile = {
+        Username: user.Username,
+        Password: '',
+        Email: user.Email,
+        Birthday: user.Birthday || '',
+      };
     });
   }
 
   /**
-   * updates user information in API
+   * updates user information in API, sending only the fields that changed
    * @function editUser
-   * @param Username {any}
-   * @param userProfile {any}
-   * @return an updated user in json format
    */
-
   editUser(): void {
-    this.fetchApiData.editUser(this.userProfile).subscribe((resp) => {
-      this.dialogRef.close();
+    const changes: Record<string, string> = {};
+    const { Username, Password, Email, Birthday } = this.userProfile;
+    if (Username.trim() && Username.trim() !== this.original?.Username) changes['Username'] = Username.trim();
+    if (Email.trim() && Email.trim() !== this.original?.Email) changes['Email'] = Email.trim();
+    if (Birthday !== (this.original?.Birthday || '')) changes['Birthday'] = Birthday;
+    if (Password) changes['Password'] = Password;
 
-      localStorage.setItem('user', this.userProfile.Username);
+    if (!Object.keys(changes).length) {
+      this.dialogRef.close(false);
+      return;
+    }
 
-      this.snackBar.open('Your profile was updated successfully!', 'OK', {
-        duration: 4000,
-      });
-      setTimeout(() => {
-        window.location.reload();
-      });
-    });
+    this.fetchApiData.editUser(changes).subscribe(
+      (user) => {
+        localStorage.setItem('user', user.Username);
+        if (user.token) localStorage.setItem('token', user.token);
+        this.dialogRef.close(true);
+        this.snackBar.open('Your profile was updated.', 'OK', { duration: 4000 });
+      },
+      (message: string) => {
+        this.snackBar.open(message, 'OK', { duration: 4000 });
+      }
+    );
   }
 }

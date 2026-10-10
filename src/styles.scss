@@ -1,8 +1,8 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-$myFlix-Angular-client2-primary: mat.define-palette(mat.$amber-palette, 600, 400, 800);
-$myFlix-Angular-client2-accent: mat.define-palette(mat.$blue-grey-palette, 300);
+$myFlix-Angular-client2-primary: mat.define-palette(mat.$green-palette, 500, 300, 700);
+$myFlix-Angular-client2-accent: mat.define-palette(mat.$blue-grey-palette, 400);
 $myFlix-Angular-client2-warn: mat.define-palette(mat.$red-palette);
 
 $myFlix-Angular-client2-theme: mat.define-dark-theme((
@@ -16,16 +16,18 @@ $myFlix-Angular-client2-theme: mat.define-dark-theme((
 @include mat.all-component-themes($myFlix-Angular-client2-theme);
 
 :root {
-  --ink: #0b0d12;
-  --ink-elevated: #141822;
-  --ink-soft: #1c2230;
-  --line: rgba(240, 232, 214, 0.12);
-  --cream: #f3ebe0;
-  --cream-muted: rgba(243, 235, 224, 0.68);
-  --amber: #e8a317;
-  --amber-deep: #c4840e;
-  --font-display: "Syne", system-ui, sans-serif;
-  --font-body: "Outfit", system-ui, sans-serif;
+  --lb-bg: #14181c;
+  --lb-panel: #1c2228;
+  --lb-panel-2: #2c3440;
+  --lb-line: rgba(255, 255, 255, 0.08);
+  --lb-text: #def;
+  --lb-muted: #9ab;
+  --lb-green: #00e054;
+  --lb-green-deep: #00b844;
+  --lb-blue: #40bcf4;
+  --lb-orange: #ff8000;
+  --font-ui: "DM Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
 }
 
 *,
@@ -41,38 +43,43 @@ body {
 
 body {
   margin: 0;
-  font-family: var(--font-body);
-  color: var(--cream);
-  background:
-    radial-gradient(ellipse 90% 55% at 10% -10%, rgba(232, 163, 23, 0.16), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(70, 110, 160, 0.18), transparent 50%),
-    var(--ink);
-  background-attachment: fixed;
-}
-
-h1, h2, h3, h4, .brand, .mat-card-title {
-  font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  font-family: var(--font-ui);
+  color: var(--lb-text);
+  background: var(--lb-bg);
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: var(--amber);
+  color: var(--lb-green);
+  text-decoration: none;
+
+  &:hover {
+    color: #fff;
+  }
 }
 
 .mat-raised-button.mat-primary,
 .mat-flat-button.mat-primary {
-  font-family: var(--font-display);
+  font-family: var(--font-ui);
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  background: var(--lb-green) !important;
+  color: #113 !important;
+}
+
+.mat-stroked-button {
+  font-family: var(--font-ui);
+  font-weight: 600;
 }
 
 .mat-dialog-container {
-  background: var(--ink-elevated) !important;
-  color: var(--cream) !important;
-  border-radius: 16px !important;
-  border: 1px solid var(--line);
+  background: var(--lb-panel) !important;
+  color: var(--lb-text) !important;
+  border-radius: 4px !important;
+  border: 1px solid var(--lb-line);
   padding: 0 !important;
   overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
 }
 
 .mat-form-field {
@@ -85,18 +92,29 @@ a {
 .mat-dialog-container .mat-card {
   background: transparent !important;
   box-shadow: none !important;
-  color: var(--cream) !important;
-  padding: 1.5rem 1.75rem 1.25rem !important;
+  color: var(--lb-text) !important;
+  padding: 1.35rem 1.5rem 1.15rem !important;
 }
 
 .mat-dialog-container .mat-card-title {
-  font-size: 1.5rem !important;
+  font-family: var(--font-ui);
+  font-size: 1.15rem !important;
+  font-weight: 700;
   margin-bottom: 0.5rem;
+  color: #fff;
 }
 
-.mat-dialog-container .mat-card-actions {
+.mat-dialog-container .mat-card-actions,
+.mat-dialog-container .mat-dialog-actions {
   padding: 0.5rem 0 0 !important;
   margin: 0 !important;
+}
+
+.dialog-card p {
+  margin: 0.75rem 0 0;
+  line-height: 1.55;
+  color: var(--lb-muted);
+  max-width: 36rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,49 +1,70 @@
 .welcome {
-  position: relative;
   min-height: 100vh;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem clamp(1.25rem, 4vw, 3rem) 3rem;
-}
-
-.welcome__atmosphere {
-  position: absolute;
-  inset: 0;
   background:
-    linear-gradient(180deg, transparent 40%, rgba(11, 13, 18, 0.92) 100%),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 80px,
-      rgba(243, 235, 224, 0.03) 80px,
-      rgba(243, 235, 224, 0.03) 81px
-    );
-  pointer-events: none;
-  animation: welcome-drift 18s ease-in-out infinite alternate;
+    linear-gradient(180deg, rgba(20, 24, 28, 0.35) 0%, rgba(20, 24, 28, 0.92) 72%, var(--lb-bg) 100%),
+    radial-gradient(ellipse 80% 55% at 50% 20%, rgba(0, 224, 84, 0.08), transparent 60%),
+    var(--lb-bg);
 }
 
-@keyframes welcome-drift {
-  from { opacity: 0.85; transform: scale(1); }
-  to { opacity: 1; transform: scale(1.04); }
-}
-
-.welcome__brand,
-.welcome__hero {
-  position: relative;
-  z-index: 1;
+.welcome__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--lb-line);
 }
 
 .brand {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.35rem;
-  letter-spacing: -0.03em;
-  color: var(--cream);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: #fff !important;
+  text-decoration: none;
+}
 
-  em {
-    font-style: normal;
-    color: var(--amber);
+.brand__dots {
+  display: inline-flex;
+  gap: 3px;
+
+  i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: block;
+
+    &:nth-child(1) { background: var(--lb-orange); }
+    &:nth-child(2) { background: var(--lb-green); }
+    &:nth-child(3) { background: var(--lb-blue); }
+  }
+}
+
+.welcome__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+
+  button {
+    background: none;
+    border: 0;
+    color: var(--lb-muted);
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.35rem 0.2rem;
+
+    &:hover {
+      color: #fff;
+    }
   }
 }
 
@@ -51,57 +72,40 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  max-width: 36rem;
-  padding-bottom: clamp(2rem, 8vh, 5rem);
-  animation: welcome-rise 0.8s ease-out both;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem clamp(1.25rem, 4vw, 2.5rem) 4rem;
+  animation: welcome-rise 0.7s ease-out both;
 }
 
 @keyframes welcome-rise {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-.welcome__eyebrow {
-  margin: 0 0 0.75rem;
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--amber);
 }
 
 .welcome__hero h1 {
   margin: 0;
-  font-size: clamp(2.4rem, 7vw, 3.8rem);
-  font-weight: 800;
-  line-height: 1.05;
-  color: var(--cream);
-}
-
-.welcome__lede {
-  margin: 1.1rem 0 0;
-  font-size: 1.1rem;
-  line-height: 1.55;
-  color: var(--cream-muted);
-  max-width: 28rem;
-}
-
-.welcome__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.5vw, 3.15rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #fff;
 }
 
 .welcome__cta {
-  min-width: 8.5rem;
-  padding: 0.35rem 1.4rem !important;
+  margin-top: 1.75rem !important;
+  min-width: 13rem;
+  padding: 0.45rem 1.5rem !important;
+  border-radius: 3px !important;
+  font-size: 0.95rem !important;
 }
 
-.welcome__ghost {
-  min-width: 8.5rem;
-  border-color: rgba(243, 235, 224, 0.35) !important;
-  color: var(--cream) !important;
+.welcome__note {
+  margin: 1.25rem 0 0;
+  max-width: 28rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--lb-muted);
 }

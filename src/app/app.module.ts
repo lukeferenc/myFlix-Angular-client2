@@ -26,12 +26,14 @@ import { DirectorCardComponent } from './director-card/director-card.component';
 import { MovieViewComponent } from './movie-view/movie-view.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { RemoveUserComponent } from './delete-user/delete-user.component';
+import { AuthGuard } from './auth.guard';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
-  { path: 'movies', component: MovieCardComponent },
-  { path: 'users', component: UserProfileComponent },
-  { path: '', redirectTo: 'welcome', pathMatch: 'prefix' },
+  { path: 'movies', component: MovieCardComponent, canActivate: [AuthGuard] },
+  { path: 'users', component: UserProfileComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+  { path: '**', redirectTo: 'welcome' },
 ];
 
 @NgModule({

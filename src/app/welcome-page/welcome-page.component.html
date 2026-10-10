@@ -1,21 +1,23 @@
 <div class="welcome">
-  <div class="welcome__atmosphere" aria-hidden="true"></div>
-  <header class="welcome__brand">
-    <span class="brand">my<em>Flix</em></span>
+  <header class="welcome__nav">
+    <a class="brand" href="#" (click)="$event.preventDefault()">
+      <span class="brand__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      myFlix
+    </a>
+    <nav class="welcome__links">
+      <button type="button" (click)="openUserLoginDialog()">Sign in</button>
+      <button type="button" (click)="openUserRegistrationDialog()">Create account</button>
+    </nav>
   </header>
+
   <main class="welcome__hero">
-    <p class="welcome__eyebrow">Your movie shelf</p>
-    <h1>Find the next film.<br />Keep the favorites.</h1>
-    <p class="welcome__lede">
-      Browse the catalog, open directors and genres, and build a list that actually feels like yours.
-    </p>
-    <div class="welcome__actions">
-      <button mat-raised-button color="primary" class="welcome__cta" (click)="openUserLoginDialog()">
-        Login
-      </button>
-      <button mat-stroked-button class="welcome__ghost" (click)="openUserRegistrationDialog()">
-        Sign up
-      </button>
-    </div>
+    <h1>
+      Track films you’ve watched.<br />
+      Save those you want to see.
+    </h1>
+    <button mat-raised-button color="primary" class="welcome__cta" (click)="openUserRegistrationDialog()">
+      Get started — it’s free!
+    </button>
+    <p class="welcome__note">Your personal film diary. Browse the catalog, mark favorites, dig into directors and genres.</p>
   </main>
 </div>

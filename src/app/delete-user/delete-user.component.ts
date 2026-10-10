@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -8,25 +9,26 @@ import { Router } from '@angular/router';
   templateUrl: './delete-user.component.html',
   styleUrls: ['./delete-user.component.scss'],
 })
-export class RemoveUserComponent implements OnInit {
-
+export class RemoveUserComponent {
   constructor(
     public fetchApiData: FetchApiDataService,
+    public dialogRef: MatDialogRef<RemoveUserComponent>,
     public snackbar: MatSnackBar,
     public router: Router
   ) {}
 
-  ngOnInit(): void {}
-
   deleteUser(): void {
-    console.log("deleteuserdialog")
     const user = localStorage.getItem('user');
-    this.fetchApiData.removeUserProfile().subscribe(() => {
-      this.snackbar.open(`${user} has been deleted`, 'OK', {
-        duration: 4000,
-      });
-      localStorage.clear();
-    });
-    this.router.navigate(['welcome']);
+    this.fetchApiData.removeUserProfile().subscribe(
+      () => {
+        localStorage.clear();
+        this.dialogRef.close();
+        this.snackbar.open(`${user} has been deleted.`, 'OK', { duration: 4000 });
+        this.router.navigate(['welcome']);
+      },
+      (message: string) => {
+        this.snackbar.open(message, 'OK', { duration: 4000 });
+      }
+    );
   }
 }

@@ -4,10 +4,9 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FetchApiDataService } from '../fetch-api-data.service';
+import { FetchApiDataService, User } from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 
 import { GenreCardComponent } from '../genre-card/genre-card.component';
 import { DirectorCardComponent } from '../director-card/director-card.component';
@@ -20,15 +19,18 @@ import { MovieViewComponent } from '../movie-view/movie-view.component';
 })
 export class MovieCardComponent implements OnInit {
   movies: any[] = [];
-  Favourites: any[] = [];
-  user: any[] = [];
+  filteredMovies: any[] = [];
+  genres: string[] = [];
+  Favourites: string[] = [];
+  loading = true;
 
+  search = '';
+  activeGenre: string | null = null;
 
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
-    public router: Router
+    public snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -36,30 +38,64 @@ export class MovieCardComponent implements OnInit {
     this.getFavouriteMovies();
   }
 
-   /**
+  /**
    * Retrieves all the movies from the database
-   * @function getAllMovies
-   * @return movies in json format
+   * @function getMovies
    */
-
   getMovies(): void {
-    this.fetchApiData.getAllMovies().subscribe((resp: any) => {
-      this.movies = resp;
-      console.log(this.movies);
-      return this.movies;
+    this.fetchApiData.getAllMovies().subscribe(
+      (resp: any[]) => {
+        this.movies = resp;
+        this.genres = Array.from(new Set(resp.map((m) => m.Genre.Name))).sort();
+        this.loading = false;
+        this.applyFilters();
+      },
+      (message: string) => {
+        this.loading = false;
+        this.snackBar.open(message, 'OK', { duration: 5000 });
+      }
+    );
+  }
+
+  /**
+   * Narrows the grid by the search text (title or director) and the selected genre.
+   * @function applyFilters
+   */
+  applyFilters(): void {
+    const q = this.search.trim().toLowerCase();
+    this.filteredMovies = this.movies.filter((movie) => {
+      if (this.activeGenre && movie.Genre.Name !== this.activeGenre) return false;
+      if (!q) return true;
+      return (
+        movie.Title.toLowerCase().includes(q) ||
+        movie.Director.Name.toLowerCase().includes(q)
+      );
     });
   }
 
-   /**
-   * Opens a dialog containing info about the genre
-   * @param name {string}
-   * @param description {string}
+  /**
+   * Selects a genre chip; clicking the active chip clears it.
+   * @param genre {string | null}
    */
+  setGenre(genre: string | null): void {
+    this.activeGenre = this.activeGenre === genre ? null : genre;
+    this.applyFilters();
+  }
 
+  clearFilters(): void {
+    this.search = '';
+    this.activeGenre = null;
+    this.applyFilters();
+  }
+
+  /**
+   * Opens a dialog containing info about the genre
+   * @param Name {string}
+   * @param Description {string}
+   */
   openGenreCard(Name: string, Description: string): void {
     this.dialog.open(GenreCardComponent, {
-      data: {
-        Name, Description },
+      data: { Name, Description },
       width: '450px',
     });
   }
@@ -69,20 +105,18 @@ export class MovieCardComponent implements OnInit {
    * @param Name {string}
    * @param Bio {string}
    */
-
-  openDirectorCard(Name: string, Bio: string,): void {
+  openDirectorCard(Name: string, Bio: string): void {
     this.dialog.open(DirectorCardComponent, {
-      data: { Name, Bio},
+      data: { Name, Bio },
       width: '450px',
     });
   }
 
-   /**
+  /**
    * Opens a dialog containing info about the movie
    * @param Title {string}
    * @param Description {string}
    */
-
   openMovieView(Title: string, Description: string): void {
     this.dialog.open(MovieViewComponent, {
       data: { Title, Description },
@@ -90,76 +124,45 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
-   /**
-   * Get the favourite movieslist of the user
+  /**
+   * Get the favourite movies list of the user
    */
-
   getFavouriteMovies(): void {
-    const user = localStorage.getItem('user');
-    this.fetchApiData.getUser().subscribe((resp: any) => {
-      this.Favourites = resp.FavouriteMovies;
-      console.log(this.Favourites);
+    this.fetchApiData.getUser().subscribe((user: User) => {
+      this.Favourites = user.FavouriteMovies || [];
     });
   }
 
-  /**
-   * use API endpoint to let user add favorite movie
-   * @function addFavouriteMovies
-   * @param id {string}
-   * @returns an array of the movie object in json format
-   */
-
-  addFavouriteMovies(id: string, title: string): void {
-    this.fetchApiData.addFavouriteMovies(id).subscribe((resp: any) => {
-      this.snackBar.open(`${title} has been added to your Watchlist!`, 'OK', {
-        duration: 4000,
-      });
-      this.ngOnInit();
-    });
-    return this.getFavouriteMovies();
-  }
-
-  /**
-   * use API endpoint to remove user favourite
-   * @function removeFavouriteMovie
-   * @param Id {string}
-   * @returns favourite movies has been updated in json format
-   */
-
-  removeFavouriteMovie(id: string): void {
-    this.fetchApiData.deleteFavouriteMovies(id).subscribe((resp: any) => {
-      console.log(resp);
-      this.snackBar.open(`${id} has been removed from your favorites!`, 'OK', {
-        duration: 4000,
-      });
-      this.ngOnInit();
-    });
-    return this.getFavouriteMovies();
-  }
-  
   /**
    * is movie already in favouritelist of user
    * @param id {string}
    * @returns true or false
    */
-
   isFavorite(id: string): boolean {
-    return this.Favourites.some((movie) => movie === id);
+    return this.Favourites.includes(id);
   }
 
   /**
-   * add or remove favourite movie
-   * if the movie is not on the favourite list, call
-   * @function addFavouriteMovies
-   * if the movie is already on the user favourite list, call
-   * @function removeFavouriteMovie
+   * Adds or removes a favourite, then syncs the list from the API response.
    * @param movie {any}
    */
-
   toggleFavorite(movie: any): void {
-    this.isFavorite(movie._id)
-      ? this.removeFavouriteMovie(movie._id)
-      : this.addFavouriteMovies(movie._id, movie.Title);
+    const removing = this.isFavorite(movie._id);
+    const request = removing
+      ? this.fetchApiData.deleteFavouriteMovies(movie._id)
+      : this.fetchApiData.addFavouriteMovies(movie._id);
+
+    request.subscribe(
+      (user: User) => {
+        this.Favourites = user.FavouriteMovies || [];
+        const text = removing
+          ? `${movie.Title} was removed from your favourites.`
+          : `${movie.Title} was added to your favourites.`;
+        this.snackBar.open(text, 'OK', { duration: 3000 });
+      },
+      (message: string) => {
+        this.snackBar.open(message, 'OK', { duration: 4000 });
+      }
+    );
   }
-  
 }

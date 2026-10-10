@@ -1,11 +1,12 @@
 <div class="nav-bar">
   <mat-toolbar class="tool-bar">
-    <a class="brand nav-brand" routerLink="/movies">my<em>Flix</em></a>
+    <a class="brand nav-brand" routerLink="/movies">
+      <span class="brand__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      myFlix
+    </a>
     <span class="spacer"></span>
-    <button mat-button type="button" (click)="moveToMovies()">Movies</button>
-    <button mat-button type="button" (click)="moveToProfile()">Profile</button>
-    <button class="logout" mat-stroked-button type="button" (click)="logOut()">
-      Logout
-    </button>
+    <button mat-button type="button" class="nav-link" (click)="moveToMovies()">Films</button>
+    <button mat-button type="button" class="nav-link" (click)="moveToProfile()">Profile</button>
+    <button class="logout" mat-button type="button" (click)="logOut()">Sign out</button>
   </mat-toolbar>
 </div>

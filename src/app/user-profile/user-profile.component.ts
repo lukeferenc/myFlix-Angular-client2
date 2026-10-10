@@ -4,16 +4,13 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FetchApiDataService } from '../fetch-api-data.service';
+import { FetchApiDataService, User } from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { RemoveUserComponent } from '../delete-user/delete-user.component';
-import { GenreCardComponent } from '../genre-card/genre-card.component';
-import { DirectorCardComponent } from '../director-card/director-card.component';
-import { MovieViewComponent } from '../movie-view/movie-view.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -21,144 +18,80 @@ import { MovieViewComponent } from '../movie-view/movie-view.component';
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
-  user: any = {};
+  user: Partial<User> = {};
   FavouriteMovies: any[] = [];
-  Username = localStorage.getItem('user');
 
   constructor(
     public dialog: MatDialog,
     public fetchApiData: FetchApiDataService,
-    public snackBar: MatSnackBar,
-    public router: Router
+    public snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.getUserProfile();
-    this.getFavs();
-    // this.getFavouriteMovies();
+    this.loadProfile();
   }
 
   /**
-   * call API endpoint to get user info
-   * @function getUserProfile
-   * @param Username
-   * @return users data in json format
+   * Loads the user first, then resolves their favourite ids against the catalog.
+   * @function loadProfile
    */
-
-  getUserProfile(): void {
-    const user = localStorage.getItem('user');
-    if (user) {
-      this.fetchApiData.getUser().subscribe((res: any) => {
-        this.user = res;
-        console.log(this.user);
-        return this.user;
-      });
-    }
-  }
-
-  /**
-   * open a dialog to edit the profile of the user
-   */
-
-  openEditUserDialog(): void {
-    this.dialog.open(EditUserComponent, {
-      width: '300px',
-    });
-  }
-
-  /**
-   * open a dialog to edit the profile of the user
-   */
-
-  openDeleteUserDialog(): void {
-    console.log("delete")
-    this.dialog.open(RemoveUserComponent, {
-      width: '280px',
-    });
-  }
-
-  /**
-   *open a dialog to display the GenreViewComponent
-  */
-
-  openGenreDialog(name: string, description: string): void {
-    this.dialog.open(GenreCardComponent, {
-      data: { name: name, description: description },
-      width: '280px',
-    });
-  }
-
-  /**
-   * open a dialog to display the DirectorViewComponent
-   */
-
-  openDirectorDialog(name: string, bio: string, birthdate: string): void {
-    this.dialog.open(DirectorCardComponent, {
-      data: { name: name, bio: bio, birth: birthdate },
-      width: '300px',
-    });
-  }
-
-  /**
-   * open a dialog to display the MovieDescriptionComponent
-   */
-
-  openMovieViewDialog(title: string, description: string): void {
-    this.dialog.open(MovieViewComponent, {
-      data: { title: title, description: description },
-      width: '300px',
-    });
-  }
-
-  /**
-   * call API endpoint to remove the current user
-   * @function removeUserProfile
-   * @param Username {any}
-   * @return that the account has been removed
-   */
-
-  removeUser(): void {
-    this.fetchApiData.deleteUser().subscribe(() => {
-      this.snackBar.open(`${this.Username} has been removed!`, 'OK', {
-        duration: 4000,
-      });
-      localStorage.clear();
-    });
-    this.router.navigate(['welcome']);
-  }
-
-  /**
-   * Get users FavouriteMovies from the users data
-   */
-
-  getFavs(): void {
-    let movies: any[] = [];
-    this.fetchApiData.getAllMovies().subscribe((res: any) => {
-      movies = res;
-      movies.forEach((movie: any) => {
-        if (this.user.FavouriteMovies.includes(movie._id)) {
-          this.FavouriteMovies.push(movie);
+  loadProfile(): void {
+    this.fetchApiData
+      .getUser()
+      .pipe(
+        switchMap((user) => {
+          this.user = user;
+          return this.fetchApiData.getAllMovies();
+        })
+      )
+      .subscribe(
+        (movies: any[]) => {
+          const favIds = this.user.FavouriteMovies || [];
+          this.FavouriteMovies = movies.filter((movie) => favIds.includes(movie._id));
+        },
+        (message: string) => {
+          this.snackBar.open(message, 'OK', { duration: 4000 });
         }
-        });
-    }); 
+      );
+  }
+
+  /**
+   * open a dialog to edit the profile of the user
+   */
+  openEditUserDialog(): void {
+    this.dialog
+      .open(EditUserComponent, { width: '340px' })
+      .afterClosed()
+      .subscribe((updated) => {
+        if (updated) this.loadProfile();
+      });
+  }
+
+  /**
+   * open a dialog to confirm deleting the profile
+   */
+  openDeleteUserDialog(): void {
+    this.dialog.open(RemoveUserComponent, {
+      width: '320px',
+    });
   }
 
   /**
    * use API end-point to remove user favourite
    * @function deleteFavouriteMovie
-   * @param Id {string}
-   * @returns updated users data in json format
+   * @param movie {any}
    */
-
-  deleteFavouriteMovie(MovieID: string): void {
-    this.fetchApiData.deleteFavouriteMovies(MovieID).subscribe((res: any) => {
-      console.log(res);
-      this.snackBar.open('Movie has been removed from favourites', 'OK', {
-        duration: 2000,
-      });
-      // this.ngOnInit();
-      location.reload();
-      return this.FavouriteMovies;
-    });
+  deleteFavouriteMovie(movie: any): void {
+    this.fetchApiData.deleteFavouriteMovies(movie._id).subscribe(
+      () => {
+        this.FavouriteMovies = this.FavouriteMovies.filter((m) => m._id !== movie._id);
+        this.snackBar.open(`${movie.Title} was removed from your favourites.`, 'OK', {
+          duration: 3000,
+        });
+      },
+      (message: string) => {
+        this.snackBar.open(message, 'OK', { duration: 4000 });
+      }
+    );
   }
 }
